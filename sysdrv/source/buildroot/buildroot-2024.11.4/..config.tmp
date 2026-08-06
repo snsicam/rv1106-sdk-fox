@@ -1503,6 +1503,8 @@ deps_config := \
 	package/python-zope-interface/Config.in \
 	package/python-zlmdb/Config.in \
 	package/python-zipstream-ng/Config.in \
+	package/python-zipp/Config.in \
+	package/python-zstandard/Config.in \
 	package/python-zeroconf/Config.in \
 	package/python-zc-lockfile/Config.in \
 	package/python-yatl/Config.in \
@@ -1582,6 +1584,7 @@ deps_config := \
 	package/python-tabledata/Config.in \
 	package/python-systemd/Config.in \
 	package/python-sympy/Config.in \
+	package/python-streaming-form-data/Config.in \
 	package/python-starlette/Config.in \
 	package/python-stack-data/Config.in \
 	package/python-sqlparse/Config.in \
@@ -1598,6 +1601,7 @@ deps_config := \
 	package/python-smmap2/Config.in \
 	package/python-smbus-cffi/Config.in \
 	package/python-smbprotocol/Config.in \
+	package/python-smart-open/Config.in \
 	package/python-slob/Config.in \
 	package/python-six/Config.in \
 	package/python-sip/Config.in \
@@ -1729,6 +1733,7 @@ deps_config := \
 	package/python-propcache/Config.in \
 	package/python-prompt-toolkit/Config.in \
 	package/python-priority/Config.in \
+	package/python-preprocess-cancellation/Config.in \
 	package/python-posix-ipc/Config.in \
 	package/python-portend/Config.in \
 	package/python-ply/Config.in \
@@ -1768,8 +1773,10 @@ deps_config := \
 	package/python-munch/Config.in \
 	package/python-multipart/Config.in \
 	package/python-multidict/Config.in \
+	package/python-msgspec/Config.in \
 	package/python-msgpack/Config.in \
 	package/python-msgfy/Config.in \
+	package/python-mpv/Config.in \
 	package/python-mpmath/Config.in \
 	package/python-mpd2/Config.in \
 	package/python-more-itertools/Config.in \
@@ -1778,6 +1785,7 @@ deps_config := \
 	package/python-mistune/Config.in \
 	package/python-minimalmodbus/Config.in \
 	package/python-mimeparse/Config.in \
+	package/python-mido/Config.in \
 	package/python-midiutil/Config.in \
 	package/python-memory-profiler/Config.in \
 	package/python-mbstrdecoder/Config.in \
@@ -1799,11 +1807,13 @@ deps_config := \
 	package/python-lockfile/Config.in \
 	package/python-lmdb/Config.in \
 	package/python-libusb1/Config.in \
+	package/python-libnacl/Config.in \
 	package/python-libevdev/Config.in \
 	package/python-libconfig/Config.in \
 	package/python-libconf/Config.in \
 	package/python-legacy-cgi/Config.in \
 	package/python-lark/Config.in \
+	package/python-ldap3/Config.in \
 	package/python-kmod/Config.in \
 	package/python-kiwisolver/Config.in \
 	package/python-keyring/Config.in \
@@ -1832,6 +1842,7 @@ deps_config := \
 	package/python-iptables/Config.in \
 	package/python-ipdb/Config.in \
 	package/python-iowait/Config.in \
+	package/python-inotify-simple/Config.in \
 	package/python-intelhex/Config.in \
 	package/python-iniparse/Config.in \
 	package/python-iniconfig/Config.in \
@@ -1839,6 +1850,7 @@ deps_config := \
 	package/python-inflection/Config.in \
 	package/python-inflect/Config.in \
 	package/python-incremental/Config.in \
+	package/python-importlib-metadata/Config.in \
 	package/python-immutabledict/Config.in \
 	package/python-ifaddr/Config.in \
 	package/python-idna/Config.in \
@@ -1996,6 +2008,7 @@ deps_config := \
 	package/python-argon2-cffi/Config.in \
 	package/python-argh/Config.in \
 	package/python-argcomplete/Config.in \
+	package/python-apprise/Config.in \
 	package/python-appdirs/Config.in \
 	package/python-apispec/Config.in \
 	package/python-anyio/Config.in \
@@ -3371,7 +3384,7 @@ endif
 ifneq "$(HOSTARCH)" "x86_64"
 /home/song/samba/work/rv1106/luckfox-pico/sysdrv/source/buildroot/buildroot-2024.11.4/output/build/buildroot-config/auto.conf: FORCE
 endif
-ifneq "$(BR2_VERSION_FULL)" "-g994243753-dirty"
+ifneq "$(BR2_VERSION_FULL)" "-g8a8020663-dirty"
 /home/song/samba/work/rv1106/luckfox-pico/sysdrv/source/buildroot/buildroot-2024.11.4/output/build/buildroot-config/auto.conf: FORCE
 endif
 

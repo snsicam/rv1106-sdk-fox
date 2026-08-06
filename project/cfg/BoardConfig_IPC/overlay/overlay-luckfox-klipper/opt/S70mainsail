@@ -1,0 +1,147 @@
+#!/bin/sh
+
+# Mainsail 启动脚本 - 优化版，避免每次覆盖配置
+
+NGINX=/usr/sbin/nginx
+PIDFILE=/var/run/mainsail.pid
+WEB_ROOT="/opt/mainsail"
+CONFIG="/etc/nginx/nginx.conf"
+CONF_D="/etc/nginx/conf.d"
+MAINSAIL_CONF="$CONF_D/mainsail.conf"
+
+# 准备环境：创建目录、写入配置（仅当不存在时）、创建默认页面
+pre_start() {
+    echo "准备 Mainsail 环境..."
+
+    # 创建必要的目录
+    mkdir -p /var/log/nginx /var/run "$WEB_ROOT" "$CONF_D"
+
+    # 如果 mainsail.conf 不存在则创建默认配置
+    if [ ! -f "$MAINSAIL_CONF" ]; then
+        echo "创建默认配置 $MAINSAIL_CONF ..."
+      cat > "$MAINSAIL_CONF" << CONFIG_EOF
+server {
+    listen 80;
+    server_name _;
+    root $WEB_ROOT;
+    index index.html;
+    
+    location / {
+        try_files \$uri \$uri/ /index.html;
+    }
+    
+    location /api/ {
+        proxy_pass http://127.0.0.1:7125/;
+    }
+}
+CONFIG_EOF
+    else
+        echo "配置 $MAINSAIL_CONF 已存在，跳过写入。"
+    fi
+
+    # 创建默认测试页面（如果不存在）
+    if [ ! -f "$WEB_ROOT/index.html" ]; then
+        echo "创建默认首页 $WEB_ROOT/index.html ..."
+        echo '<h1>Mainsail</h1><p>Port 80</p>' > "$WEB_ROOT/index.html"
+    fi
+
+    # 测试 nginx 配置
+    $NGINX -t -c "$CONFIG" 2>/dev/null
+    if [ $? -ne 0 ]; then
+        echo "✗ nginx 配置测试失败"
+        $NGINX -t -c "$CONFIG"   # 显示详细错误
+        return 1
+    fi
+    return 0
+}
+
+# 检查服务是否正在运行
+is_running() {
+    [ -f "$PIDFILE" ] && [ -d /proc/$(cat "$PIDFILE" 2>/dev/null) ] && return 0
+    return 1
+}
+
+# 获取本机 IPv4 地址（兼容 BusyBox）
+get_ip() {
+    # 尝试使用 ip 命令
+    if command -v ip >/dev/null 2>&1; then
+        ip=$(ip -4 addr show | grep -oE 'inet [0-9.]+' | grep -v 127.0.0.1 | head -1 | cut -d' ' -f2)
+    # 尝试使用 ifconfig 命令
+    elif command -v ifconfig >/dev/null 2>&1; then
+        ip=$(ifconfig | grep -oE 'inet addr:[0-9.]+' | cut -d: -f2 | grep -v 127.0.0.1 | head -1)
+    fi
+    [ -z "$ip" ] && ip="localhost"
+    echo "$ip"
+}
+
+case "$1" in
+    start)
+        echo "Starting Mainsail..."
+        if pre_start; then
+            if is_running; then
+                echo "✓ Mainsail 已在运行 (PID: $(cat $PIDFILE))"
+                exit 0
+            fi
+            start-stop-daemon -S -x "$NGINX" -p "$PIDFILE" -- -c "$CONFIG"
+            if [ $? -eq 0 ]; then
+                sleep 1
+                if netstat -tln 2>/dev/null | grep -q ":80 "; then
+                    echo "✓ Mainsail 启动成功"
+                    echo "  访问地址: http://$(get_ip):80"
+                else
+                    echo "⚠ 进程已启动，但端口 80 未监听"
+                fi
+            else
+                echo "✗ 启动失败"
+                exit 1
+            fi
+        else
+            echo "✗ 配置测试失败，未启动"
+            exit 1
+        fi
+        ;;
+    stop)
+        echo "Stopping Mainsail..."
+        if is_running; then
+            start-stop-daemon -K -x "$NGINX" -p "$PIDFILE" -o
+            rm -f "$PIDFILE"
+        else
+            # 尝试通过进程名和配置文件结束 nginx
+            pkill -f "nginx.*$CONFIG" 2>/dev/null
+        fi
+        echo "Mainsail 已停止"
+        ;;
+    restart)
+        "$0" stop
+        sleep 1
+        "$0" start
+        ;;
+    reload|force-reload)
+        echo "Reloading Mainsail configuration..."
+        if is_running; then
+            "$NGINX" -s reload -c "$CONFIG"
+            echo "配置已重载"
+        else
+            echo "Mainsail 未运行，无法重载"
+            exit 1
+        fi
+        ;;
+    status)
+        if is_running && netstat -tln 2>/dev/null | grep -q ":80 "; then
+            echo "Mainsail 运行中 (PID: $(cat $PIDFILE))"
+            exit 0
+        elif is_running; then
+            echo "Mainsail 进程存在但端口未监听"
+            exit 1
+        else
+            echo "Mainsail 未运行"
+            exit 3
+        fi
+        ;;
+    *)
+        echo "用法: $0 {start|stop|restart|reload|force-reload|status}"
+        exit 1
+        ;;
+esac
+
+exit $?

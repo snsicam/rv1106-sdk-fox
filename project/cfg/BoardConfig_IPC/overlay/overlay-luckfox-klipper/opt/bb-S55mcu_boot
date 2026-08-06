@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+# Trigger serial bootup sequence for Flashforge Eboard MCU.
+#
+
+start() {
+    # boot eboard mcu
+    /usr/libexec/boot_eboard_mcu &
+    # reset mainboard mcu
+    #/mnt/orig_root/lib/ld-linux.so.3 --library-path /mnt/orig_root/lib:/mnt/orig_root/usr/lib /mnt/orig_root/opt/PROGRAM/control/2.2.3/NationsCommand -c --pn /dev/ttyS5 -r &
+    /opt/control/lib/ld-linux.so.3 --library-path /opt/control/lib /opt/control/2.2.3/NationsCommand -c --pn /dev/ttyS5 -r &
+    wait
+}
+
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        ;;
+  *)
+        echo "Usage: $0 {start|stop}"
+        exit 1
+esac
+
+exit $?

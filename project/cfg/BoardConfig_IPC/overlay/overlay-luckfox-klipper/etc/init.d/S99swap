@@ -1,0 +1,95 @@
+#!/bin/sh
+#
+# Swap 初始化脚本 - 仅在系统无 swap 时创建 512MB swap 文件并持久化
+#
+
+SWAP_FILE="/etc/swap"
+FSTAB_ENTRY="$SWAP_FILE none swap sw 0 0"
+
+start() {
+    printf "检查 swap 配置: "
+    # 检查是否有任何活动的 swap
+    if [ -n "$(swapon -s 2>/dev/null)" ]; then
+        echo "已存在 swap，跳过配置。"
+        return 0
+    fi
+
+    # 检查 swap 文件是否存在
+    if [ -f "$SWAP_FILE" ]; then
+        echo "swap 文件已存在，尝试启用..."
+        swapon "$SWAP_FILE" 2>/dev/null
+        if [ $? -eq 0 ]; then
+            echo "启用成功。"
+        else
+            echo "启用失败，文件可能损坏。"
+            return 1
+        fi
+    else
+        echo "未检测到 swap，正在创建 128MB swap 文件..."
+        dd if=/dev/zero of="$SWAP_FILE" bs=1M count=128 2>/dev/null
+        chmod 600 "$SWAP_FILE"
+        mkswap "$SWAP_FILE" > /dev/null 2>&1
+        swapon "$SWAP_FILE"
+        echo "Swap 创建并启用成功。"
+    fi
+
+    # 持久化（避免重复写入）
+    if ! grep -q "$SWAP_FILE" /etc/fstab; then
+        echo "$FSTAB_ENTRY" >> /etc/fstab
+        echo "已添加 swap 条目到 /etc/fstab。"
+    fi
+
+    # 显示当前 swap 状态（可选）
+    free -m | grep -i swap
+    return 0
+}
+
+stop() {
+    echo "Swap 通常不需要停止。如需手动关闭，请使用: swapoff $SWAP_FILE"
+    return 0
+}
+
+setupswap() {
+    echo "配置swap参数"
+    # 调整内存回收与交换
+    echo 10 > /proc/sys/vm/swappiness
+    echo 200 > /proc/sys/vm/vfs_cache_pressure
+    echo 5 > /proc/sys/vm/dirty_background_ratio
+    echo 10 > /proc/sys/vm/dirty_ratio
+    echo 2048 > /proc/sys/vm/extra_free_kbytes
+    echo 20 > /proc/sys/vm/watermark_scale_factor
+    echo 1000 > /proc/sys/vm/watermark_boost_factor
+
+    # 可选：提高最小空闲内存
+    echo 16384 > /proc/sys/vm/min_free_kbytes
+
+    # 可选：降低低端内存预留比例
+    #echo "16 0" > /proc/sys/vm/lowmem_reserve_ratio
+    free -m
+    ifconfig -a
+}
+
+restart() {
+    stop
+    sleep 1
+    start
+}
+
+case "$1" in
+    start)
+        start
+        setupswap
+        ;;
+    stop)
+        stop
+        ;;
+    restart|reload)
+        restart
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+        ;;
+esac
+
+exit $?

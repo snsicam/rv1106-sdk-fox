@@ -1,18 +1,5 @@
-From 82ecf5badb818c40fba1e7ada16d53189dfe816b Mon Sep 17 00:00:00 2001
-From: eng33 <eng33@luckfox.com>
-Date: Tue, 30 Jan 2024 16:25:34 +0800
-Subject: [PATCH 1/2] Fixed header file errors
-
----
- client/main.c      | 2 +-
- client/player.c    | 2 +-
- src/shared/shell.c | 2 +-
- tools/btmgmt.c     | 2 +-
- tools/obexctl.c    | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
-
 diff --git a/client/main.c b/client/main.c
-index 1df94f0..2e19538 100644
+index 3f8143d..28470b7 100644
 --- a/client/main.c
 +++ b/client/main.c
 @@ -18,7 +18,7 @@
@@ -21,24 +8,37 @@ index 1df94f0..2e19538 100644
  #include <stdbool.h>
 -#include <wordexp.h>
 +#include <android/compat/wordexp.h>
-
+ 
  #include <glib.h>
-
+ 
+diff --git a/client/mgmt.c b/client/mgmt.c
+index 602b922..a1f6aed 100644
+--- a/client/mgmt.c
++++ b/client/mgmt.c
+@@ -26,7 +26,7 @@
+ #include <poll.h>
+ #include <getopt.h>
+ #include <stdbool.h>
+-#include <wordexp.h>
++#include <android/compat/wordexp.h>
+ #include <ctype.h>
+ 
+ #include "lib/bluetooth.h"
 diff --git a/client/player.c b/client/player.c
-index 0c59db6..e807ae0 100644
+index eed8d23..8942087 100644
 --- a/client/player.c
 +++ b/client/player.c
-@@ -23,7 +23,7 @@
+@@ -24,7 +24,7 @@
  #include <string.h>
  #include <sys/ioctl.h>
  #include <sys/uio.h>
 -#include <wordexp.h>
 +#include <android/compat/wordexp.h>
-
- #include <glib.h>
-
+ #include <sys/timerfd.h>
+ #include <sys/stat.h>
+ 
 diff --git a/src/shared/shell.c b/src/shared/shell.c
-index dfda812..86eda9d 100644
+index a8fa876..f695e70 100644
 --- a/src/shared/shell.c
 +++ b/src/shared/shell.c
 @@ -22,7 +22,7 @@
@@ -48,23 +48,101 @@ index dfda812..86eda9d 100644
 -#include <wordexp.h>
 +#include <android/compat/wordexp.h>
  #include <getopt.h>
-
+ #include <fcntl.h>
+ 
+diff --git a/tools/mesh-gatt/config-client.c b/tools/mesh-gatt/config-client.c
+index 7bdd028..c0b7098 100644
+--- a/tools/mesh-gatt/config-client.c
++++ b/tools/mesh-gatt/config-client.c
+@@ -20,7 +20,7 @@
+ #include <inttypes.h>
+ #include <stdbool.h>
+ #include <sys/uio.h>
+-#include <wordexp.h>
++#include <android/compat/wordexp.h>
+ 
+ #include <glib.h>
+ 
+diff --git a/tools/mesh-gatt/config-server.c b/tools/mesh-gatt/config-server.c
+index a53f4c2..9918f48 100644
+--- a/tools/mesh-gatt/config-server.c
++++ b/tools/mesh-gatt/config-server.c
+@@ -20,7 +20,7 @@
+ #include <inttypes.h>
+ #include <stdbool.h>
+ #include <sys/uio.h>
+-#include <wordexp.h>
++#include <android/compat/wordexp.h>
+ 
+ #include <glib.h>
+ #include "tools/mesh/config-model.h"
+diff --git a/tools/mesh-gatt/gatt.c b/tools/mesh-gatt/gatt.c
+index ab9743c..1df0e26 100644
+--- a/tools/mesh-gatt/gatt.c
++++ b/tools/mesh-gatt/gatt.c
+@@ -18,7 +18,7 @@
+ #include <stdlib.h>
+ #include <stdbool.h>
+ #include <sys/uio.h>
+-#include <wordexp.h>
++#include <android/compat/wordexp.h>
+ 
+ #include <glib.h>
+ 
+diff --git a/tools/mesh-gatt/node.c b/tools/mesh-gatt/node.c
+index 356e1cd..2927ecf 100644
+--- a/tools/mesh-gatt/node.c
++++ b/tools/mesh-gatt/node.c
+@@ -18,7 +18,7 @@
+ #include <stdlib.h>
+ #include <stdbool.h>
+ #include <sys/uio.h>
+-#include <wordexp.h>
++#include <android/compat/wordexp.h>
+ #include <inttypes.h>
+ 
+ #include <glib.h>
+diff --git a/tools/mesh-gatt/onoff-model.c b/tools/mesh-gatt/onoff-model.c
+index 9dfedd8..410b148 100644
+--- a/tools/mesh-gatt/onoff-model.c
++++ b/tools/mesh-gatt/onoff-model.c
+@@ -20,7 +20,7 @@
+ #include <inttypes.h>
+ #include <stdbool.h>
+ #include <sys/uio.h>
+-#include <wordexp.h>
++#include <android/compat/wordexp.h>
  #include <readline/readline.h>
-diff --git a/tools/btmgmt.c b/tools/btmgmt.c
-index ebef388..0cd8700 100644
---- a/tools/btmgmt.c
-+++ b/tools/btmgmt.c
-@@ -25,7 +25,7 @@
- #include <poll.h>
- #include <getopt.h>
+ #include <readline/history.h>
+ #include <glib.h>
+diff --git a/tools/mesh-gatt/prov.c b/tools/mesh-gatt/prov.c
+index 1f3f62d..f8de784 100644
+--- a/tools/mesh-gatt/prov.c
++++ b/tools/mesh-gatt/prov.c
+@@ -17,7 +17,7 @@
+ #include <stdlib.h>
+ #include <stdbool.h>
+ #include <sys/uio.h>
+-#include <wordexp.h>
++#include <android/compat/wordexp.h>
+ 
+ #include <readline/readline.h>
+ #include <readline/history.h>
+diff --git a/tools/meshctl.c b/tools/meshctl.c
+index 00a68a3..bacbeac 100644
+--- a/tools/meshctl.c
++++ b/tools/meshctl.c
+@@ -18,7 +18,7 @@
+ #include <unistd.h>
+ #include <stdlib.h>
  #include <stdbool.h>
 -#include <wordexp.h>
 +#include <android/compat/wordexp.h>
+ 
+ #include <inttypes.h>
  #include <ctype.h>
-
- #include "lib/bluetooth.h"
 diff --git a/tools/obexctl.c b/tools/obexctl.c
-index 56a7691..e8aed6a 100644
+index a398b09..d7f16c5 100644
 --- a/tools/obexctl.c
 +++ b/tools/obexctl.c
 @@ -20,7 +20,7 @@
@@ -74,8 +152,5 @@ index 56a7691..e8aed6a 100644
 -#include <wordexp.h>
 +#include <android/compat/wordexp.h>
  #include <ctype.h>
-
+ 
  #include <glib.h>
---
-2.34.1
-

@@ -1,8 +1,10 @@
---- a/src/shared/shell.c	2024-05-13 13:59:50.477347842 +0800
-+++ b/src/shared/shell.c	2024-05-13 14:11:43.277134799 +0800
+diff --git a/src/shared/shell.c b/src/shared/shell.c
+index f695e70..d138543 100644
+--- a/src/shared/shell.c
++++ b/src/shared/shell.c
 @@ -13,6 +13,9 @@
  #endif
-
+ 
  #define _GNU_SOURCE
 +
 +#include <sys/types.h>
@@ -10,33 +12,32 @@
  #include <stdio.h>
  #include <errno.h>
  #include <syslog.h>
-@@ -24,6 +27,10 @@
- #include <sys/signalfd.h>
+@@ -25,6 +28,9 @@
  #include <android/compat/wordexp.h>
  #include <getopt.h>
+ #include <fcntl.h>
 +#include <stdint.h>
 +#include <string.h>
-+#include <fcntl.h>
 +#include <paths.h>
-
+ 
  #include <readline/readline.h>
  #include <readline/history.h>
-@@ -46,6 +53,11 @@
-		printf(COLOR_BLUE "%s %-*s " COLOR_OFF "%s\n", \
-			cmd, (int)(CMD_LENGTH - strlen(cmd)), "", desc)
-
+@@ -47,6 +53,11 @@
+ 		printf(COLOR_BLUE "%s %-*s " COLOR_OFF "%s\n", \
+ 			cmd, (int)(CMD_LENGTH - strlen(cmd)), "", desc)
+ 
 +/*
 + * This is sqrt(SIZE_MAX+1), as s1*s2 <= SIZE_MAX
 + * if both s1 < MUL_NO_OVERFLOW and s2 < MUL_NO_OVERFLOW
 + */
 +#define MUL_NO_OVERFLOW	((size_t)1 << (sizeof(size_t) * 4))
  struct bt_shell_env {
-	char *name;
-	void *value;
-@@ -88,6 +100,20 @@
+ 	char *name;
+ 	void *value;
+@@ -98,6 +109,20 @@ static struct {
  static void shell_print_menu(void);
  static void shell_print_menu_zsh_complete(void);
-
+ 
 +static void * _reallocarray(void *optr, size_t nmemb, size_t size)
 +{
 +
@@ -53,10 +54,10 @@
 +
  static void cmd_version(int argc, char *argv[])
  {
-	bt_shell_printf("Version %s\n", VERSION);
-@@ -1416,3 +1442,367 @@
-
-	return env->value;
+ 	bt_shell_printf("Version %s\n", VERSION);
+@@ -1697,3 +1722,367 @@ int bt_shell_get_timeout(void)
+ {
+ 	return data.timeout;
  }
 +
 +
