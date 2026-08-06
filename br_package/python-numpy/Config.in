@@ -1,0 +1,5 @@
+config BR2_PACKAGE_PYTHON_NUMPY
+    bool "python-numpy"
+    depends on BR2_PACKAGE_PYTHON3   # 注意是 depends on，不是 select
+    help
+      NumPy is the fundamental package for scientific computing with Python.

@@ -1,0 +1,49 @@
+diff --git a/project/build.sh b/project/build.sh
+index 3f87c73bc..088a3f174 100755
+--- a/project/build.sh
++++ b/project/build.sh
+@@ -34,7 +34,7 @@ GLOBAL_PARTITIONS=""
+ GLOBAL_SDK_VERSION=""
+ WIFI_NEW_CONF=${SDK_APP_DIR}/wifi_app/wpa_supplicant_new.conf
+ WIFI_CONF=${SDK_APP_DIR}/wifi_app/wpa_supplicant.conf
+-BUILDROOT_PATH=${SDK_SYSDRV_DIR}/source/buildroot/buildroot-2023.02.6
++BUILDROOT_PATH=${SDK_SYSDRV_DIR}/source/buildroot/buildroot-2024.11.4
+ BUILDROOT_CONFIG_FILE=${BUILDROOT_PATH}/.config
+ SDK_CONFIG_DIR=${SDK_ROOT_DIR}/config
+ DTS_CONFIG=${SDK_CONFIG_DIR}/dts_config
+diff --git a/sysdrv/Makefile b/sysdrv/Makefile
+index 142248c41..420973b53 100644
+--- a/sysdrv/Makefile
++++ b/sysdrv/Makefile
+@@ -281,7 +281,7 @@ BUSYBOX_DIR := $(SYSDRV_DIR)/source/busybox
+ SYSDRV_BUSYBOX_OBJS_OUTPUT_DIR ?= $(BUSYBOX_DIR)/objs_$(BUSYBOX_CFG)
+ 
+ BUILDROOT_CFG ?= config_normal
+-BUILDROOT_VER ?= buildroot-2023.02.6
++BUILDROOT_VER ?= buildroot-2024.11.4
+ BUILDROOT_DIR := $(SYSDRV_DIR)/source/buildroot
+ 
+ CUSTOM_VER ?= custom
+diff --git a/sysdrv/source/kernel/arch/arm/boot/dts/rv1106g-luckfox-pico-ultra-w.dts b/sysdrv/source/kernel/arch/arm/boot/dts/rv1106g-luckfox-pico-ultra-w.dts
+index cb08548fc..e2c1a84bd 100755
+--- a/sysdrv/source/kernel/arch/arm/boot/dts/rv1106g-luckfox-pico-ultra-w.dts
++++ b/sysdrv/source/kernel/arch/arm/boot/dts/rv1106g-luckfox-pico-ultra-w.dts
+@@ -130,6 +130,18 @@ &uart1 {
+ 	pinctrl-0 = <&uart1m0_xfer &uart1m0_ctsn>;
+ };
+ 
++&uart3 {
++        status = "okay";
++        pinctrl-names = "default";
++        pinctrl-0 = <&uart3m0_xfer>;
++};
++
++&uart4 {
++        status = "okay";
++        pinctrl-names = "default";
++        pinctrl-0 = <&uart4m0_xfer>;
++};
++
+ &pinctrl {
+ 	wireless-bluetooth {
+ 		uart1_gpios: uart1-gpios {

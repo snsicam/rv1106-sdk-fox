@@ -1,0 +1,7 @@
+python-numpy,./bin/patchelf
+python-numpy,./etc/meson/cross-compilation.conf.in
+python-numpy,./etc/meson/cross-compilation.conf
+python-numpy,./lib/python3.11/site-packages/pybind11/__pycache__/__init__.cpython-311.pyc
+python-numpy,./lib/python3.11/site-packages/pybind11/__pycache__/_version.cpython-311.pyc
+python-numpy,./lib/python3.11/site-packages/pybind11/__pycache__/commands.cpython-311.pyc
+python-numpy,./lib/python3.11/site-packages/pybind11/__pycache__/setup_helpers.cpython-311.pyc

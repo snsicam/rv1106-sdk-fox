@@ -130,6 +130,18 @@
 	pinctrl-0 = <&uart1m0_xfer &uart1m0_ctsn>;
 };
 
+&uart3 {
+        status = "okay";
+        pinctrl-names = "default";
+        pinctrl-0 = <&uart3m0_xfer>;
+};
+
+&uart4 {
+        status = "okay";
+        pinctrl-names = "default";
+        pinctrl-0 = <&uart4m0_xfer>;
+};
+
 &pinctrl {
 	wireless-bluetooth {
 		uart1_gpios: uart1-gpios {
