@@ -1,0 +1,12 @@
+config BR2_PACKAGE_PYTHON_APPRISE
+	bool "python-apprise"
+	select BR2_PACKAGE_PYTHON_CERTIFI
+	select BR2_PACKAGE_PYTHON_REQUESTS
+	select BR2_PACKAGE_PYTHON_REQUESTS_OAUTHLIB
+	select BR2_PACKAGE_PYTHON_CLICK
+	select BR2_PACKAGE_PYTHON_MARKDOWN
+	select BR2_PACKAGE_PYTHON_PYAML
+	help
+	  Apprise allows you to send notifications to almost all of
+	  the most popular notification services available to us today.
+	  https://pypi.org/project/apprise/

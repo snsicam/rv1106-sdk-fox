@@ -1,0 +1,5 @@
+# md5, sha256 from https://pypi.org/pypi/tornado/json
+md5	ced8271d40616f279fc4ecb3ced2b90e  streaming-form-data-1.11.0.tar.gz
+#sha256	e7d8db41c0181c80d76c982aacc442c0783a2c54d6400fe028954201a2e032fe  streaming-form-data-1.11.0.tar.gz
+# Locally computed sha256 checksums
+sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
