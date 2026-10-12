@@ -576,6 +576,13 @@ busybox_clean:
 	$(AT)rm -rf $(BUSYBOX_DIR)/$(BUSYBOX_VER)
 	$(AT)rm -rf $(BUSYBOX_DIR)/objs_*
 
+# Clean only buildroot's build artifacts (output/), keeping the source tree,
+# the dl/ download cache and .config. NEVER rm -rf the whole buildroot source
+# dir here: that would wipe manual edits to defconfig/patches and force a full
+# re-download of every package source.
+buildroot_clean:
+	$(AT)rm -rf $(BUILDROOT_DIR)/$(BUILDROOT_VER)/output
+
 
 ##########################################################################################
 #   build buildroot

@@ -1,0 +1,4 @@
+spaghetti
+missing_part
+nozzle_clog
+layer_shift

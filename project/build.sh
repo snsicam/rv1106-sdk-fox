@@ -473,6 +473,7 @@ function usage() {
 	echo "clean media        -clean rockchip media libraries"
 	echo "clean app          -clean app"
 	echo "clean recovery     -clean recovery"
+	echo "clean buildroot    -clean buildroot output only (keep source & dl cache)"
 	echo ""
 	echo "firmware           -pack all the image we need to boot up system"
 	echo "ota                -pack update_ota.tar"
@@ -1289,6 +1290,9 @@ function build_clean() {
 	recovery)
 		make kernel_clean -C ${SDK_SYSDRV_DIR} SYSDRV_BUILD_RECOVERY=y
 		;;
+	buildroot)
+		make buildroot_clean -C ${SDK_SYSDRV_DIR}
+		;;
 	all)
 		make distclean -C ${SDK_SYSDRV_DIR}
 		make distclean -C ${SDK_MEDIA_DIR}
@@ -1298,9 +1302,11 @@ function build_clean() {
 		rm -rf ${SDK_ROOT_DIR}/output ${SDK_ROOT_DIR}/config
 		rm -rf ${SDK_ROOT_DIR}/sysdrv/source/kernel/out
 		rm -rf ${BOARD_CONFIG}
-		if [ -d ${SDK_SYSDRV_DIR}/source/buildroot ] && [ "$LF_TARGET_ROOTFS" = "buildroot" ]; then
-			rm -rf ${SDK_SYSDRV_DIR}/source/buildroot
-		fi
+		# Do NOT rm -rf the whole buildroot source tree: that would destroy
+		# manual edits to defconfig/patches and the dl/ download cache, forcing
+		# a full re-download of every package source. Clean only its build
+		# artifacts instead (buildroot_clean keeps source + dl/ + .config).
+		make buildroot_clean -C ${SDK_SYSDRV_DIR}
 		if [ -d ${SDK_SYSDRV_DIR}/source/busybox ]; then
 			rm -rf ${SDK_SYSDRV_DIR}/source/busybox
 		fi

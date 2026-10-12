@@ -1,0 +1,42 @@
+--- a/wscript
++++ b/wscript
+@@ -939,14 +939,13 @@
+     group = opt.get_option_group("Installation directories")
+     for ident, default, desc in _INSTALL_DIRS_LIST:
+         group.add_option('--{0}'.format(ident),
+-            type    = 'string',
++            type    = str,
+             dest    = ident,
+             default = default,
+             help    = 'directory for installing {0} [{1}]' \
+                       .format(desc, default.replace('${','').replace('}','')))
+ 
+-    group = opt.get_option_group("build and install options")
+-    group.add_option('--variant',
++    opt.add_option('--variant',
+         default = '',
+         help    = 'variant name for saving configuration and build results')
+ 
+@@ -960,11 +959,11 @@
+ 
+     group = opt.get_option_group("optional features")
+     group.add_option('--lua',
+-        type    = 'string',
++        type    = str,
+         dest    = 'LUA_VER',
+         help    = "select Lua package to autodetect. Choices (x is 1 or 2): luadef5x, lua5x, lua5.x, lua-5.x, luajit (luadef5x is for pkg-config name 'lua', the rest are exact pkg-config names)")
+     group.add_option('--swift-flags',
+-        type    = 'string',
++        type    = str,
+         dest    = 'SWIFT_FLAGS',
+         help    = "Optional Swift compiler flags")
+ 
+@@ -979,7 +978,7 @@
+ def configure(ctx):
+     from waflib import Options
+     ctx.resetenv(ctx.options.variant)
+-    ctx.check_waf_version(mini='1.8.4')
++    ctx.check_waf_version(mini='1.8.4', maxi='2.2.0')
+     target = os.environ.get('TARGET')
+     (cc, pkg_config, ar, windres) = ('cc', 'pkg-config', 'ar', 'windres')
+ 

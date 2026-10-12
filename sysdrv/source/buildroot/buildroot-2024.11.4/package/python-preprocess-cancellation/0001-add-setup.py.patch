@@ -1,0 +1,18 @@
+diff --git a/setup.py b/setup.py
+new file mode 100644
+--- /dev/null
++++ b/setup.py
+@@ -0,0 +1,13 @@
++from setuptools import setup
++
++setup(
++    name="preprocess_cancellation",
++    version="0.2.1",
++    py_modules=["preprocess_cancellation"],
++    python_requires=">=3.6.2",
++    entry_points={
++        "console_scripts": [
++            "preprocess_cancellation=preprocess_cancellation:_main",
++        ],
++    },
++)
